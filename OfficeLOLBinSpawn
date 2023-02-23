@@ -1,0 +1,22 @@
+let lolbin = externaldata(Process:string) [@"https://raw.githubusercontent.com/Fa1c0/MS-Sentinel/main/lolbin.txt"];
+DeviceProcessEvents
+// Looks for parent MSOffice
+| where InitiatingProcessFileName has_any ("winword.exe","outlook.exe","onenote.exe","POWERPNT.EXE","excel.exe")
+// Filter out filetype matches.
+| where ProcessCommandLine !hassuffix ".xlsx"
+| where ProcessCommandLine !hassuffix ".ppt"
+| where ProcessCommandLine !hassuffix ".pptx"
+| where ProcessCommandLine !hassuffix ".xls"
+| where ProcessCommandLine !hassuffix ".pdf"
+| where ProcessCommandLine !hassuffix ".docx"
+| where ProcessCommandLine !hassuffix ".xlsm"
+| where ProcessCommandLine !hassuffix ".doc"
+| where ProcessCommandLine !hassuffix ".csv"
+// Filter out false positives
+| where ProcessCommandLine !contains "csc.exe"
+| where ProcessCommandLine !contains "verclsid.exe"
+| where ProcessCommandLine !contains "protocolhandler.exe"
+// Looks for Lolbins
+| where ProcessCommandLine has_any (lolbin)
+// Summarise
+| distinct ProcessCommandLine,InitiatingProcessFileName
