@@ -1,0 +1,15 @@
+// Check attachment info for emails with html files attached.
+let html = EmailAttachmentInfo
+// Authorized, checked senders.
+| where SenderFromAddress !contains "yourcompanydomainhere.com"
+// Banned under anti-spam policy
+| where SenderFromAddress !contains "yourblockeddomains.com" // Blocked x/x/xx
+| where FileType contains "html"
+| summarize by NetworkMessageId;
+// Retrieve email events matching message ID of html attachment mails that were not blocked or junked.
+EmailEvents
+| where NetworkMessageId has_any (html)
+| where DeliveryAction !contains "Blocked"
+| where DeliveryAction !contains "Junked"
+| where parse_json(AuthenticationDetails).CompAuth != "pass" or parse_json(AuthenticationDetails).DKIM != "pass" or parse_json(AuthenticationDetails).DMARC != "pass" or parse_json(AuthenticationDetails).SPF != "pass"
+| distinct TimeGenerated,SenderFromAddress,RecipientEmailAddress,Subject,ThreatNames,OrgLevelPolicy,OrgLevelAction
