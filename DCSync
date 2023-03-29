@@ -1,0 +1,5 @@
+SecurityEvent
+| where EventID == "4662"
+| where Account !endswith "$"
+| where Properties has_any ("1131f6aa-9c07-11d1-f79f-00c04fc2dcd2","1131f6ad-9c07-11d1-f79f-00c04fc2dcd2","89e95b76-444d-4c62-991a-0facbeda640c")
+// | where Account <> Enter legitimate accounts here.
