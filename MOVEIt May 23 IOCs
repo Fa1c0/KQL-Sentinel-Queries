@@ -1,0 +1,3 @@
+let IOCS = externaldata(Process:string) [@"https://raw.githubusercontent.com/Fa1c0/MS-Sentinel/main/MOVEIt_IOCs"];
+CommonSecurityLog
+| where DestinationIP in (IOCS) or DestinationIP startswith "5.252.189." or DestinationIP startswith "5.252.190." or DestinationIP startswith "5.252.191."
