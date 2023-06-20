@@ -1,0 +1,4 @@
+// 4887 - Certificate Services approved a certificate request and issued a certificate.
+SecurityEvent
+| where EventID == "4887"
+| where Subject has_any ("<INSERT HIGH VALUE ACCOUNT NAMES HERE>")
