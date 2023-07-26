@@ -1,0 +1,3 @@
+let IOCS = externaldata(Process:string) [@"https://raw.githubusercontent.com/Fa1c0/MS-Sentinel/main/crypto_jacking"];
+CommonSecurityLog
+| where RequestURL in (IOCS)
