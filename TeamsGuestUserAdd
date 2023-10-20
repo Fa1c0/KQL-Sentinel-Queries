@@ -1,0 +1,13 @@
+// Create an alert for EXT users added to more than one TeamsChannel within 15 minutes.
+let timeframe=15m;
+let threshold=0;
+OfficeActivity
+| where TimeGenerated > ago(1d)
+| where Operation == "MemberAdded"
+| mv-expand Members
+| extend UserAdded = tostring(Members.UPN)
+| where UserAdded contains "#EXT#"
+| where CommunicationType == "Team"
+| summarize
+    ['Number of Teams Guest Added To']=dcount(TeamName), ['Team Names']=make_set(TeamName) by UserAdded, bin(TimeGenerated, timeframe)
+| where ['Number of Teams Guest Added To'] > threshold
