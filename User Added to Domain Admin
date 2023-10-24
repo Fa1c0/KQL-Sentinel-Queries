@@ -1,0 +1,4 @@
+// Checks for user being added to domain admins group.
+Event
+| where EventID == 4728
+| where RenderedDescription contains "Group Name:		Domain Admins"
