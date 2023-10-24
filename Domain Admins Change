@@ -1,0 +1,4 @@
+// Checks for changes to the domain admins group.
+Event
+| where EventID == 5136
+| where RenderedDescription contains "CN=Domain Admins
