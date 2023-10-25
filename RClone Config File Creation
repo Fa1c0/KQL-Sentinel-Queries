@@ -1,0 +1,3 @@
+DeviceFileEvents
+| where ActionType contains "create"
+| where FileName contains "rclone"
