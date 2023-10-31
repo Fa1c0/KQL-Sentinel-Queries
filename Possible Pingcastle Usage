@@ -1,0 +1,3 @@
+// Suspected Pingcastle usage.
+DeviceProcessEvents
+| where ProcessCommandLine contains "pingcastle"
