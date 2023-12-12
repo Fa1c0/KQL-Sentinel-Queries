@@ -1,0 +1,4 @@
+AzureActivity
+| extend message_ = tostring(parse_json(Properties).message)
+| where message_ == "Microsoft.Network/publicIPAddresses/write"
+| summarize by TimeGenerated, Caller, OperationName, Resource, ResourceGroup, ActivityStatus
