@@ -1,0 +1,16 @@
+let suspicious_devices =
+DeviceFileEvents
+| where ActionType == "FileCreated"
+| where FolderPath !contains "C:\\"
+| where FolderPath !startswith "\\\\"
+| where FolderPath !contains "RECYCLE.BIN"
+| where InitiatingProcessVersionInfoFileDescription == "Windows Explorer"
+| summarize count() by DeviceName, bin(Timestamp, 1m)
+| where count_  > 5;
+DeviceFileEvents
+| where DeviceName has_any (suspicious_devices)
+| where ActionType == "FileCreated"
+| where FolderPath !contains "C:\\"
+| where FolderPath !startswith "\\\\"
+| where FolderPath !contains "RECYCLE.BIN"
+| where InitiatingProcessVersionInfoFileDescription == "Windows Explorer"
