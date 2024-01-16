@@ -1,0 +1,7 @@
+SecurityEvent
+| where EventID == "4662"
+| where Account !endswith "$"
+| where Properties has_any ("9c07-11d1-f79f-00c04fc2dcd2","9c07-11d1-f79f-00c04fc2dcd2","444d-4c62-991a-0facbeda640c")
+// Enter non machine accounts that might perform DC Sync, e.g. user provisioning platform.
+// | where Account <> ""
+| where AccessMask == "0x100"
