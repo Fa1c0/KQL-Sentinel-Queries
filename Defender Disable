@@ -1,0 +1,3 @@
+DeviceProcessEvents
+| where ProcessCommandLine contains "-DisableRealTimeMonitoring"
+| summarize by TimeGenerated,AccountName,DeviceName,FileName,ProcessCommandLine
