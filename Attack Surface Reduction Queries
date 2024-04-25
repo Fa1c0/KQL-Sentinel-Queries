@@ -1,0 +1,7 @@
+// ASR Block - Use advanced protection against ransomware
+DeviceEvents
+| where ActionType startswith "Asr"
+| extend IsAudit_ = tostring(AdditionalFields.IsAudit)
+| extend RuleId_ = tostring(AdditionalFields.RuleId)
+| where IsAudit_ != 'true'
+| where ReportId == 'c1db55ab-c21a-4637-bb3f-a12568109d35' // GUID of rule
