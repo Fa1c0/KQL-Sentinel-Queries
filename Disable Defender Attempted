@@ -1,0 +1,2 @@
+DeviceProcessEvents
+| where ProcessCommandLine has_any ("Set-MpPreference -DisableRealtimeMonitoring $true","sc stop WinDefend")
