@@ -1,0 +1,13 @@
+AzureActivity
+| where OperationName contains "create role assignment"
+| extend RoleDefinitionId_ = tostring(parse_json(tostring(parse_json(tostring(parse_json(Properties).requestbody)).Properties)).RoleDefinitionId)
+| extend PrincipalId_ = tostring(parse_json(tostring(parse_json(tostring(parse_json(Properties).requestbody)).Properties)).PrincipalId)
+| extend Scope_ = tostring(parse_json(tostring(parse_json(tostring(parse_json(Properties).requestbody)).Properties)).Scope)
+| where RoleDefinitionId_ has_any ("B24988AC-6180-42A0-AB88-20F7382DD24C","8E3AF657-A8FF-443C-A75C-2FE8C4BCB635","ACDD72A7-3385-48EF-BD42-F606FBA81AE7","F58310D9-A9F6-439A-9E8D-F62E7B41A168","18D7D88D-D35E-4FB5-A5C3-7773C20A72D9")
+| distinct TenantId,Caller,CallerIpAddress,ResourceGroup,Scope_,RoleDefinitionId_,PrincipalId_
+// Check the RoleDefinition ID against the below, full list can be found. https://learn.microsoft.com/de-de/azure/role-based-access-control/built-in-roles#reader
+//Contributor	B24988AC-6180-42A0-AB88-20F7382DD24C
+//Owner	8E3AF657-A8FF-443C-A75C-2FE8C4BCB635
+//Reader	ACDD72A7-3385-48EF-BD42-F606FBA81AE7
+//Administrator	F58310D9-A9F6-439A-9E8D-F62E7B41A168
+//User Access Administrator 18D7D88D-D35E-4FB5-A5C3-7773C20A72D9
