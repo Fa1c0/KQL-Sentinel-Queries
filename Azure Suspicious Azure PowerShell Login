@@ -1,0 +1,9 @@
+SigninLogs
+| where AppDisplayName == "Azure Active Directory PowerShell" or AppDisplayName == "Microsoft Azure PowerShell"
+| where ResultType == "0"
+| where DeviceDetail.isManaged <> true // Exclude devices managed.
+| extend trustType_ = tostring(DeviceDetail.trustType)
+| extend displayName_ = tostring(DeviceDetail.displayName)
+| where parse_json(NetworkLocationDetails)[0].networkType <> "trustedNamedLocation" //Exclude named locations.
+| where parse_json(NetworkLocationDetails)[1].networkType <> "trustedNamedLocation"
+| distinct TimeGenerated,Location,Identity,AppDisplayName,IPAddress,ResourceDisplayName,trustType_,displayName_
