@@ -1,0 +1,6 @@
+AzureActivity
+| where OperationName == "Get Disk SAS URI"
+| where parse_json(Properties).eventCategory == "Administrative"
+| extend uri_ = tostring(parse_json(HTTPRequest).uri)
+| extend entity_ = tostring(parse_json(Properties).entity)
+| summarize by TimeGenerated,OperationName,Caller,CallerIpAddress,uri_,entity_,Resource,ResourceGroup
