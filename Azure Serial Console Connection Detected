@@ -1,0 +1,6 @@
+AzureActivity
+| where OperationName == "Connect"
+| where OperationNameValue == "Microsoft.SerialConsole/serialPorts/connect/action"
+| extend entity_ = tostring(parse_json(Properties).entity)
+| distinct TimeGenerated,Caller,CallerIpAddress,ResourceGroup,entity_
+| project-reorder TimeGenerated, Caller, CallerIpAddress, ResourceGroup, entity_
