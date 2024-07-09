@@ -1,1 +1,1 @@
-A colletion of KQL queries that cover use cases not enumerated by default Sentinel content.
+A colletion of KQL use case queries to suppliment out of the box Sentinel.
