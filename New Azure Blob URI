@@ -1,6 +1,0 @@
-//The query looks for creation of SAS URI's used for Blob storage.
-AzureActivity
-| where OperationName == "Get Disk SAS URI"
-| extend uri_ = tostring(parse_json(HTTPRequest).uri)
-| extend entity_ = tostring(parse_json(Properties).entity)
-| summarize by TimeGenerated,OperationName,Caller,CallerIpAddress,uri_,entity_
