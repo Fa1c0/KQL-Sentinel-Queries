@@ -1,0 +1,6 @@
+AzureActivity
+| where OperationName contains "Update Key Vault"
+| where parse_json(Properties).eventCategory == "Administrative"
+| extend message_ = tostring(parse_json(Properties).message)
+| distinct TimeGenerated,Caller,CallerIpAddress,Resource,ResourceGroup,message_
+// Consider tuning by callerIP if volume too high."
