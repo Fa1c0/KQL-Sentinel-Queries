@@ -1,0 +1,4 @@
+AzureActivity
+| where OperationName == "Create/Update User Assigned Identity"
+| where parse_json(Properties).eventCategory == "Administrative"
+| distinct TimeGenerated,Caller,CallerIpAddress,Resource
