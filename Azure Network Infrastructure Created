@@ -1,0 +1,4 @@
+AzureActivity
+| where OperationName contains "Create or Update" and OperationName contains "Network"
+| where parse_json(Properties).eventCategory == "Administrative"
+| distinct TimeGenerated, Caller, CallerIpAddress, Resource
