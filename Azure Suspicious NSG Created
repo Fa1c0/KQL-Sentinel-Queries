@@ -1,0 +1,8 @@
+// Check for creation of NSG rule that allows any, SSH or RDP inbound.
+AzureActivity
+| where OperationName contains "Create or Update Network Security Group"
+| extend access_ = tostring(parse_json(tostring(parse_json(tostring(parse_json(tostring(parse_json(tostring(parse_json(Properties).responseBody)).properties)).securityRules))[0].properties)).access)
+| extend destinationPortRange_ = tostring(parse_json(tostring(parse_json(tostring(parse_json(tostring(parse_json(tostring(parse_json(Properties).responseBody)).properties)).securityRules))[0].properties)).destinationPortRange)
+| where access_ == "Allow"
+| where destinationPortRange_ has_any ("*","22","389")
+| distinct TimeGenerated,Caller,CallerIpAddress,destinationPortRange_,ResourceGroup
