@@ -1,0 +1,9 @@
+# Log collector memory less than 50% for a directory. Check Azure Monitor Insights for the device and verify which drive is full. If /var or /var/log fills up the agent will stop working and logs won't be forwarded.
+
+InsightsMetrics
+| where Computer contains "DeviceNameHere"
+| where Namespace == "LogicalDisk"
+| where Name == "FreeSpacePercentage"
+| where Val <= 10
+| extend vm_azm_ms_mountId_ = tostring(parse_json(Tags).["vm.azm.ms/mountId"])
+| distinct TimeGenerated,Computer,vm_azm_ms_mountId_,Val
