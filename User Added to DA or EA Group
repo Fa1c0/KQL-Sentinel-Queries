@@ -1,0 +1,9 @@
+IdentityDirectoryEvents
+| where Application == "Active Directory"
+| where ActionType == "Group Membership changed"
+| extend TO_GROUP_ = tostring(AdditionalFields.["TO.GROUP"])
+| extend TARGET_OBJECT_USER_ = tostring(AdditionalFields.["TARGET_OBJECT.USER"])
+| extend TO_DEVICE_ = tostring(AdditionalFields.["TO.DEVICE"])
+| extend ACTOR_ACCOUNT_ = tostring(AdditionalFields.["ACTOR.ACCOUNT"])
+| where TO_GROUP_ has_any ('Domain Admins','Enterprise Admins')
+| summarize by TimeGenerated,TARGET_OBJECT_USER_,TO_GROUP_,TO_DEVICE_,AccountName
