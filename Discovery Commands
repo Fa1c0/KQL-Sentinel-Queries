@@ -1,0 +1,5 @@
+// Search for hands on keyboard discovery commands.
+let discovery = externaldata(discovery:string) [@"https://raw.githubusercontent.com/Fa1c0/MS-Sentinel/refs/heads/main/Discovery_commands"];
+DeviceProcessEvents
+| where ProcessCommandLine has_any (discovery)
+| summarize count() by TimeGenerated,AccountName,DeviceName,InitiatingProcessFileName,ProcessCommandLine
