@@ -1,0 +1,15 @@
+// Query based on detail contained in https://www.microsoft.com/en-us/security/blog/2024/10/31/chinese-threat-actor-storm-0940-uses-credentials-from-password-spray-attacks-from-a-covert-network/.
+let suspAppRes = datatable(appId:string, resourceId:string)
+[
+    "1950a258-227b-4e31-a9cf-717495945fc2", "00000003-0000-0000-c000-000000000000"
+];
+let userAgents = datatable(userAgent:string)
+[
+    "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36" //Low fidelity
+];
+SigninLogs
+| where TimeGenerated >=ago(60d)
+| where AppId  in ((suspAppRes | project appId)) and ResourceIdentity in ((suspAppRes | project resourceId)) and UserAgent in ((userAgents| project userAgent))
+| where ResultDescription == ""
+| summarize by UserPrincipalName,ResourceDisplayName,IPAddress
