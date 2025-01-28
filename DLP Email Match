@@ -1,0 +1,22 @@
+CloudAppEvents
+| where ActionType == "DlpRuleMatch"
+| where AccountDisplayName contains "<target here>"
+| extend 0_ = tostring(parse_json(tostring(parse_json(tostring(RawEventData.ExchangeMetaData)).To))[0])
+| extend 1_ = tostring(parse_json(tostring(parse_json(tostring(RawEventData.ExchangeMetaData)).To))[1])
+| extend 2_ = tostring(parse_json(tostring(parse_json(tostring(RawEventData.ExchangeMetaData)).To))[2])
+| extend 3_ = tostring(parse_json(tostring(parse_json(tostring(RawEventData.ExchangeMetaData)).To))[3])
+| extend 4_ = tostring(parse_json(tostring(parse_json(tostring(RawEventData.ExchangeMetaData)).To))[4])
+| extend 5_ = tostring(parse_json(tostring(parse_json(tostring(RawEventData.ExchangeMetaData)).To))[5])
+| extend 6_ = tostring(parse_json(tostring(parse_json(tostring(RawEventData.ExchangeMetaData)).To))[6])
+| extend 7_ = tostring(parse_json(tostring(parse_json(tostring(RawEventData.ExchangeMetaData)).To))[7])
+| extend 8_ = tostring(parse_json(tostring(parse_json(tostring(RawEventData.ExchangeMetaData)).To))[8])
+| extend 9_ = tostring(parse_json(tostring(parse_json(tostring(RawEventData.ExchangeMetaData)).To))[9])
+| extend 10_ = tostring(parse_json(tostring(parse_json(tostring(RawEventData.ExchangeMetaData)).To))[10])
+| where 0_ contains "<target_domain>"
+| extend RuleName_ = tostring(parse_json(tostring(parse_json(tostring(RawEventData.PolicyDetails))[0].Rules))[0].RuleName)
+| extend RuleMode_ = tostring(parse_json(tostring(parse_json(tostring(RawEventData.PolicyDetails))[0].Rules))[0].RuleMode)
+| extend RuleId_ = tostring(parse_json(tostring(parse_json(tostring(RawEventData.PolicyDetails))[0].Rules))[0].RuleId)
+| extend From_ = tostring(parse_json(tostring(RawEventData.ExchangeMetaData)).From)
+| extend Subject_ = tostring(parse_json(tostring(RawEventData.ExchangeMetaData)).Subject)
+| extend ObjectId_ = tostring(RawEventData.ObjectId)
+| summarize by TimeGenerated, AccountDisplayName, Application, RuleName_,RuleMode_,RuleId_, From_, 0_, 1_, 2_, 3_, 4_, 5_, 6_, 7_, 8_, 9_, 10_, Subject_
