@@ -1,4 +1,4 @@
-// Search for hands on keyboard discovery commands.
+// Search for hands on keyboard discovery commands, based on discovery list.
 let discovery = externaldata(discovery:string) [@"https://raw.githubusercontent.com/Fa1c0/MS-Sentinel/refs/heads/main/Discovery_commands"];
 DeviceProcessEvents
 | where ProcessCommandLine has_any (discovery)
