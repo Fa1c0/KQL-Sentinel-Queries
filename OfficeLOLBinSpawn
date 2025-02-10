@@ -1,3 +1,4 @@
+// Seatch for lolbins based on lolbin list.
 let lolbin = externaldata(Process:string) [@"https://raw.githubusercontent.com/Fa1c0/MS-Sentinel/main/lolbin.txt"];
 DeviceProcessEvents
 // Looks for parent MSOffice
