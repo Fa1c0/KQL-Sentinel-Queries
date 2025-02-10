@@ -1,3 +1,4 @@
+// DLP alert match for email from Purview events.
 CloudAppEvents
 | where ActionType == "DlpRuleMatch"
 | where AccountDisplayName contains "<target here>"
