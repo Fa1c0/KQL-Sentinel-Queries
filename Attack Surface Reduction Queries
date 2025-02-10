@@ -1,4 +1,4 @@
-// ASR Block - Use advanced protection against ransomware
+// ASR Block - Use advanced protection against ransomware //
 DeviceEvents
 | where ActionType startswith "Asr"
 | extend IsAudit_ = tostring(AdditionalFields.IsAudit)
