@@ -1,0 +1,5 @@
+// Simple query to detected anonymous access to blob storage account.
+StorageBlobLogs
+| where AuthenticationType == "Anonymous"
+// | where AccountName <> "Exclusion here"
+| summarize count() by AccountName, StatusText, Uri, CallerIpAddress, Category, Type
