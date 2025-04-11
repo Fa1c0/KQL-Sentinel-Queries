@@ -1,0 +1,4 @@
+CloudAppEvents
+| where ActionType == "Write StorageAccounts"
+| where ActivityObjects[1].Name == "Microsoft.Storage/storageAccounts"
+| project ObjectName, AccountDisplayName
