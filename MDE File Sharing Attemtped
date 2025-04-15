@@ -1,0 +1,5 @@
+// Use case developed on https://isc.sans.edu/diary/rss/31862
+let file_sites = externaldata(RemoteUrl:string) [@"https://raw.githubusercontent.com/Fa1c0/MS-Sentinel/refs/heads/main/file_transfer.txt"];
+DeviceNetworkEvents
+| where RemoteUrl has_any (file_sites)
+| summarize by TimeGenerated,DeviceName,RemoteUrl,ActionType,InitiatingProcessAccountName
