@@ -1,0 +1,6 @@
+let rmm_users = _GetWatchlist('rmm_users'); // You will need to add a watchlist to your Sentinel that includes known rmm users.
+let rmm_tools = externaldata(Process:string) [@"https://raw.githubusercontent.com/Fa1c0/MS-Sentinel/main/rmm.txt"];
+union DeviceProcessEvents, rmm_users
+| where InitiatingProcessVersionInfoProductName has_any (rmm_tools)
+| join kind=leftanti (rmm_users) on $left.AccountName == $right.AccountName
+| summarize by TimeGenerated,AccountName,InitiatingProcessVersionInfoCompanyName,InitiatingProcessVersionInfoOriginalFileName,DeviceName
