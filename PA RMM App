@@ -1,0 +1,5 @@
+let rmm_apps = externaldata(Process:string) [@"https://raw.githubusercontent.com/Fa1c0/MS-Sentinel/main/rmm_firewall_apps.txt"];
+CommonSecurityLog
+| where ApplicationProtocol has_any (rmm_apps)
+| where DeviceCustomString4 <> "BYOD"
+| summarize by TimeGenerated, SourceIP, SourceUserName, ApplicationProtocol, DeviceAction
