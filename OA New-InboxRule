@@ -1,0 +1,6 @@
+OfficeActivity
+| where Operation == "New-InboxRule"
+| extend Rule_name = tostring(parse_json(Parameters)[4].Value)
+| extend Forward_to = tostring(parse_json(Parameters)[2].Value)
+| extend From = tostring(parse_json(Parameters)[3].Value)
+| summarize by TimeGenerated,UserId,Rule_name,From,Forward_to
