@@ -1,0 +1,7 @@
+EmailEvents
+| where SenderFromDomain == "<your_domain>"
+| where EmailDirection == "Inbound"
+| where DeliveryAction <> "Blocked"
+| where parse_json(AuthenticationDetails).SPF <> "pass"
+| where parse_json(AuthenticationDetails).DMARC <> "pass"
+| where OrgLevelPolicy <> "Exchange transport rule"
