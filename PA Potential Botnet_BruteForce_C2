@@ -1,0 +1,21 @@
+let PrivateIPregex = @'^127\.|^10\.|^172\.1[6-9]\.|^172\.2[0-9]\.|^172\.3[0-1]\.|^192\.168\.';// Inside out treat feeds detection with action displayed.
+CommonSecurityLog
+| where isnotempty(IndicatorThreatType)
+| where IndicatorThreatType == "BruteForce" //BruteForce or Botnet or C2
+| extend FwPolicy = DeviceCustomString1
+| extend SourceIPInt = iff(SourceIP matches regex PrivateIPregex, "InternalIP", "PublicIP")
+| where SourceIPInt == "InternalIP"
+| where DeviceAction == "allow"
+| summarize count()
+    by
+    DeviceName,
+    IndicatorThreatType,
+    SourceIP,
+    DestinationIP,
+    ThreatConfidence,
+    DeviceProduct,
+    SourceIPInt,
+    DeviceAction,
+    SourceUserName,
+    FwPolicy
+| where DeviceAction == "allow"

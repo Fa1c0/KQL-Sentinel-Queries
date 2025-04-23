@@ -1,6 +1,0 @@
-CommonSecurityLog
-| where IndicatorThreatType == "Botnet"
-| where SourceIP startswith "10." or SourceIP startswith "172." or SourceIP startswith "192."
-| where DeviceCustomString4 !contains "outside"
-| where DeviceCustomString4 !contains "untrust"
-| summarize count() by SourceIP, DestinationIP, ApplicationProtocol, DeviceAction
