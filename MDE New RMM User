@@ -1,6 +1,0 @@
-let rmm_users = _GetWatchlist('rmm_users'); //Watchlist of current RMM users.
-let rmm_tools = externaldata(URI: string, RMMTool: string) [h'https://raw.githubusercontent.com/magicsword-io/LOLRMM/main/website/public/api/rmm_domains.csv'] | project RMMTool;
-union DeviceProcessEvents, rmm_users
-| where InitiatingProcessVersionInfoProductName has_any (rmm_tools)
-| join kind=leftanti (rmm_users) on $left.AccountName == $right.AccountName
-| summarize by TimeGenerated,AccountName,DeviceName,InitiatingProcessVersionInfoCompanyName,InitiatingProcessVersionInfoProductName,InitiatingProcessParentFileName
