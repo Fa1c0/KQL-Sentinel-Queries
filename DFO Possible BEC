@@ -1,0 +1,15 @@
+let sharepointDomains = _GetWatchlist('sharepoint_domians'); // This can be used for tuning if required
+EmailEvents
+| where EmailDirection == "Inbound"
+| where DeliveryAction == "Delivered" or DeliveryAction == "Junked"
+| join EmailUrlInfo on NetworkMessageId
+| where Url contains "-my.sharepoint.com"
+| where Url !contains "<Your_domain_here>""
+| where SenderFromAddress <> "postmaster@<Your_domain_here>.com"
+| extend companyName = split(SenderFromDomain,".")[0]
+| where Url !contains companyName
+| parse Url with * "https://" sharepointDomain "-my.sharepoint" linkending
+| project TimeGenerated, sharepointDomain, Url, UrlDomain, SenderMailFromDomain, NetworkMessageId, companyName, SenderFromAddress, RecipientEmailAddress
+| where SenderMailFromDomain <> "sharepointonline.com"
+| join kind=leftanti (sharepointDomains) on $left.UrlDomain == $right.SearchKey
+| where not(companyName has_any("gmail", "aol", "yahoo", "outlook"))
