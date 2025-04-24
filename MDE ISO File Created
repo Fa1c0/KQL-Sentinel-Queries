@@ -1,0 +1,8 @@
+//May want to add a watchlist to ignore frequent matches.
+DeviceFileEvents
+| where FileName endswith ".iso"
+//| where InitiatingProcessFileName == "explorer.exe"
+| where FolderPath !contains "C:\\$Recycle.Bin\\"
+| where FolderPath !contains "D:\\$RECYCLE.BIN\\"
+| where ActionType == "FileCreated"
+| summarize by TimeGenerated,DeviceName,FileName,FolderPath,InitiatingProcessAccountName,PreviousFileName,PreviousFolderPath,InitiatingProcessCommandLine
