@@ -1,0 +1,3 @@
+DeviceProcessEvents
+| where ProcessCommandLine contains "mshta"  and ProcessCommandLine contains "http"
+| where ProcessCommandLine !contains "SenseNdr.exe"
