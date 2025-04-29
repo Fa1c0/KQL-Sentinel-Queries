@@ -1,0 +1,4 @@
+// This query looks for use of psexec.exe to execute code on a remote system.
+DeviceProcessEvents
+| where ProcessCommandLine contains "psexec.exe \\\\"
+| where ProcessCommandLine contains "-accepteula -nobanner C:"
