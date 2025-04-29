@@ -1,0 +1,5 @@
+DeviceProcessEvents
+| where ProcessCommandLine has_any ("localgroup", "group")
+| where ProcessCommandLine has_any ("Administrators", "Domain Admins")
+| where ProcessCommandLine contains " /d"
+| where AccountName != "system"
