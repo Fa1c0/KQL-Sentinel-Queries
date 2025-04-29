@@ -1,0 +1,4 @@
+DeviceProcessEvents
+| where InitiatingProcessFileName has_any ('winword.exe','excel.exe','msaccess.exe','lsass.exe','taskeng.exe','winlogon.exe','schtask.exe','regsvr32.exe','wmiprvse.exe','wsmprovhost.exe')
+| where FileName contains "rundll32.exe"
+| summarize count() by ProcessCommandLine
