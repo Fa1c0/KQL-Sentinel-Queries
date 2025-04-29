@@ -1,0 +1,4 @@
+DeviceProcessEvents
+| where ProcessCommandLine has_any ("whoami", "localgroup adminsistrators", "ipconfig", "systeminfo", "\"nltest.exe\" /domain_trusts", "\"net.exe\" view /all /domain", "group \"Domain Admins\" /domain", "config workstation")
+| where AccountName <> "system"
+| project AccountName, DeviceName, ProcessCommandLine, AccountUpn
