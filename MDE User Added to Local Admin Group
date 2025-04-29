@@ -1,0 +1,2 @@
+DeviceProcessEvents
+| where ProcessCommandLine has_all ("net localgroup","add","administrator")
