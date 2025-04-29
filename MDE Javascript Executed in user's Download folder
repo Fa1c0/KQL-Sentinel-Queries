@@ -1,0 +1,5 @@
+// WScript was used to execute .js from user's Download folder.
+DeviceProcessEvents
+| where FolderPath contains "wscript.exe"
+| where ProcessCommandLine contains "\\Downloads\\"
+| where ProcessCommandLine endswith ".js"
