@@ -1,0 +1,3 @@
+SecurityEvent
+| where EventID == 4728
+| where TargetUserName contains " Domain Admins"
