@@ -1,0 +1,6 @@
+DeviceNetworkEvents
+| where InitiatingProcessFileName contains "winword.exe"
+| where RemotePort == 445
+| where not(ipv4_is_private(RemoteIP)) or not(ipv4_is_private(LocalIP))
+| extend SignatureName = tostring(parse_json(AdditionalFields).SignatureName)
+| distinct DeviceName, ActionType, LocalIP,RemoteIP, LocalPort, RemotePort,SignatureName
