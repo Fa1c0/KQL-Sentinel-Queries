@@ -1,0 +1,3 @@
+DeviceProcessEvents
+// Exclusions for known rules.
+| where ProcessCommandLine contains "netsh advfirewall firewall add rule"
