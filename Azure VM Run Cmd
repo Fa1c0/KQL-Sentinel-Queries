@@ -1,0 +1,5 @@
+AzureActivity
+| where OperationName contains "Run Command on Virtual Machine"
+| where parse_json(Properties).eventCategory == "Administrative"
+| where CallerIpAddress <> "<>" //Tune permitted addresses
+| distinct TimeGenerated, Caller, CallerIpAddress, ResourceGroup, Resource
