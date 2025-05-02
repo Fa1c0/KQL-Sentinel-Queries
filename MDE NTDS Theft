@@ -1,0 +1,6 @@
+// Use case based on https://lolbas-project.github.io/lolbas/OtherMSBinaries/Ntdsutil/
+DeviceProcessEvents
+| where FileName == "ntdsutil.exe"
+| where ProcessCommandLine contains "ntdsutil.exe"
+| where ProcessCommandLine contains "ifm"
+| summarize by TimeGenerated,AccountName,DeviceName,FileName,FolderPath,ProcessCommandLine
