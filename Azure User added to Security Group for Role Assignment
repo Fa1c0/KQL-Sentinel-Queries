@@ -1,0 +1,4 @@
+CloudAppEvents
+| where ActionType == "Add member to group."
+| where ActivityObjects[0].Name startswith "<Group_name_here>"
+| project AccountDisplayName, ActivityObjects[2].Name, ActivityObjects[0].Name
