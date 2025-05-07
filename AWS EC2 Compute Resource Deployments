@@ -1,0 +1,30 @@
+// Retrieve AWS CloudTrail events generated within the last day
+AWSCloudTrail
+// Filter events related to instance creation
+| where EventName =~ "RunInstances"
+// Exclude events with error messages
+| where isempty(ErrorMessage)
+// Extract the event source type
+| extend EventSourceSplit = split(EventSource, ".")
+| extend Type = tostring(EventSourceSplit[0])
+// Extract instance-related details from the event data
+| extend instance = tostring(parse_json(RequestParameters).instanceType),platform = tostring(parse_json(ResponseElements).instancesSet.items[0].platform)
+// Determine the operating system platform
+| extend OSplatform = iff(isempty(platform), tostring("Linux"), platform),CPU = tostring(parse_json(ResponseElements).instancesSet.items[0].cpuOptions),core = toint(parse_json(ResponseElements).instancesSet.items[0].cpuOptions.coreCount),corThread = toint(parse_json(ResponseElements).instancesSet.items[0].cpuOptions.threadsPerCore),InstanceId = tostring(parse_json(ResponseElements).instancesSet.items[0].instanceId)
+// Filter out instances with empty core values
+| where isnotempty(core)
+// Calculate the total compute based on core and thread counts
+// | extend totalCorecompute = core * corThread
+| extend UserIdentityArn = iif(isempty(UserIdentityArn), tostring(parse_json(Resources)[0].ARN), UserIdentityArn)
+| extend UserName = tostring(split(UserIdentityArn, '/')[-1])
+| extend AccountName = case( UserIdentityPrincipalid == "Anonymous", "Anonymous", isempty(UserIdentityUserName), UserName, UserIdentityUserName)
+| extend AccountName = iif(AccountName contains "@", tostring(split(AccountName, '@', 0)[0]), AccountName),
+  AccountUPNSuffix = iif(AccountName contains "@", tostring(split(AccountName, '@', 1)[0]), "")
+// Summarize relevant information for analysis
+// | summarize Start= min(TimeGenerated),
+//   end=   max(TimeGenerated),
+//   totalgpu= sum(totalCorecompute)
+//   by SourceIpAddress, RecipientAccountId, AccountName, AccountUPNSuffix, UserIdentityArn, UserAgent
+// Filter results based on total GPU compute and time duration
+// | where totalgpu > 800
+// | where datetime_diff('hour', end, Start) < 8
