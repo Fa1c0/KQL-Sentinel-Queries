@@ -1,0 +1,31 @@
+// Parse recent victim domains for company name.
+externaldata(activity: string, attackdate: string, claim_url: string, country: string, description: string, domain: string, group: string, press: string, screenshot: string, url: string, victim: string)
+[ 
+   h@"https://api.ransomware.live/v2/recentvictims"
+]
+with(format='multijson', ingestionMapping='[{"Column":"activity","Properties":{"Path":"$.activity"}},{"Column":"attackdate","Properties":{"Path":"$.attackdate"}},{"Column":"claim_url","Properties":{"Path":"$.claim_url"}},{"Column":"country","Properties":{"Path":"$.country"}},{"Column":"description","Properties":{"Path":"$.description"}},{"Column":"domain","Properties":{"Path":"$.domain"}},{"Column":"group","Properties":{"Path":"$.group"}},{"Column":"press","Properties":{"Path":"$.press"}},{"Column":"url","Properties":{"Path":"$.url"}},{"Column":"victim","Properties":{"Path":"$.victim"}}]')
+| where domain has_any ("<orgname>","orgname")
+
+
+// Parse all victims for company name.
+externaldata(activity: string, attackdate: string, claim_url: string, country: string, description: string, domain: string, group: string, press: string, screenshot: string, url: string, victim: string)
+[ 
+   h@"https://api.ransomware.live/v2/searchvictims/<org_name>"
+]
+with(format='multijson', ingestionMapping='[{"Column":"activity","Properties":{"Path":"$.activity"}},{"Column":"attackdate","Properties":{"Path":"$.attackdate"}},{"Column":"claim_url","Properties":{"Path":"$.claim_url"}},{"Column":"country","Properties":{"Path":"$.country"}},{"Column":"description","Properties":{"Path":"$.description"}},{"Column":"domain","Properties":{"Path":"$.domain"}},{"Column":"group","Properties":{"Path":"$.group"}},{"Column":"press","Properties":{"Path":"$.press"}},{"Column":"url","Properties":{"Path":"$.url"}},{"Column":"victim","Properties":{"Path":"$.victim"}}]')
+| where claim_url <> "<old_url_here>" // Exclude previous breach.
+
+// Parse all victims for company name.
+externaldata(activity: string, attackdate: string, claim_url: string, country: string, description: string, domain: string, group: string, press: string, screenshot: string, url: string, victim: string)
+[ 
+   h@"https://api.ransomware.live/v2/searchvictims/<org_name>"
+]
+with(format='multijson', ingestionMapping='[{"Column":"activity","Properties":{"Path":"$.activity"}},{"Column":"attackdate","Properties":{"Path":"$.attackdate"}},{"Column":"claim_url","Properties":{"Path":"$.claim_url"}},{"Column":"country","Properties":{"Path":"$.country"}},{"Column":"description","Properties":{"Path":"$.description"}},{"Column":"domain","Properties":{"Path":"$.domain"}},{"Column":"group","Properties":{"Path":"$.group"}},{"Column":"press","Properties":{"Path":"$.press"}},{"Column":"url","Properties":{"Path":"$.url"}},{"Column":"victim","Properties":{"Path":"$.victim"}}]')
+| where claim_url <> "<old_url_here>" // Exclude previous breach.
+
+// Check inbound email for hits from ransomwared company.
+let domain = externaldata(domain:string)["https://api.ransomware.live/v2/recentvictims"]
+with(format='multijson', ingestionMapping='[{"Column":"domain","Properties":{"Path":"$.domain"}}]') | where domain <> "";
+EmailEvents
+| where SenderFromDomain has_any (domain)
+| summarize by SenderFromDomain
