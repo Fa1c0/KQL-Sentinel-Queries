@@ -1,0 +1,6 @@
+EmailEvents
+| extend PhoneInSubject = extract(@"\b(?:\+1\s?)?(?:\(?\d{3}\)?[\s\-]?)\d{3}[\s\-]?\d{4}\b", 0, Subject)
+| where Subject has_any ("phone", "call", "message", "voice", "SMS")
+| where not(Subject has_any ("sample", "PO", "invoice", "Purchase Order", "Order #", "DN#", "In voice"))
+| where isnotempty(PhoneInSubject)
+| project TimeGenerated, SenderFromAddress, RecipientEmailAddress, Subject, PhoneInSubject, NetworkMessageId, DeliveryLocation
