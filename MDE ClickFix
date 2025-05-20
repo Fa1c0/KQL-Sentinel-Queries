@@ -1,0 +1,3 @@
+DeviceEvents
+| where (ActionType == "GetClipboardData" and InitiatingProcessFileName has "powershell.exe") or
+(InitiatingProcessCommandLine has "powershell" and InitiatingProcessCommandLine has "-enc")
