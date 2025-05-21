@@ -1,0 +1,6 @@
+AzureActivity
+| where OperationName == "Create or Update Virtual Machine"
+| where ResourceGroup !hasprefix <> // Tune known resource groups.
+| where ActivityStatus == "Started"
+| where CallerIpAddress <> // Trusted locations.
+| distinct TimeGenerated,Caller,CallerIpAddress,ResourceGroup,Resource
