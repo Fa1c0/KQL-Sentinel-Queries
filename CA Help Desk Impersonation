@@ -1,0 +1,9 @@
+CloudAppEvents
+| where Application == "Microsoft Teams"
+| where ActionType == "ChatCreated"
+| extend HasForeignTenantUsers = 
+parse_json(RawEventData)["ParticipantInfo"]["HasForeignTenantUsers"]
+| extend DisplayName = parse_json(RawEventData)["Members"][0]["DisplayName"]
+| where IsExternalUser == 1 or HasForeignTenantUsers == 'true'
+| where DisplayName contains "help" or AccountDisplayName contains "help" 
+or AccountId contains "help"
