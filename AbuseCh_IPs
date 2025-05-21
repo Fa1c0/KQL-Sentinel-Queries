@@ -1,0 +1,7 @@
+let malware_ips = externaldata(first_seen_utc: string, ip: string, malware_printable: string)
+[ 
+   h@"https://<STORAGE_BLOB>"
+]
+with(format='csv', ingestionMapping='[{"Column":"first_seen_utc","Properties":{"Path":"$.first_seen_utc"}},{"Column":"ioc_value","Properties":{"Path":"$.ioc_value"}},{"Column":"malware_printable","Properties":{"Path":"$.malware_printable"}}]');
+DeviceNetworkEvents
+| where RemoteIP has_any (malware_ips)
