@@ -1,0 +1,6 @@
+EmailEvents
+| where SenderFromAddress == "noreply@yourorg.com"
+| where DeliveryLocation <> "On-premises/external"
+| where DeliveryAction == "Delivered"
+| where parse_json(AuthenticationDetails).SPF <> "pass"
+| where Connectors <> "Inbound from Azure"
