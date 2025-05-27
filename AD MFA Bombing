@@ -1,0 +1,7 @@
+SigninLogs
+| where ResultType != 0
+| where AuthenticationRequirement == "multiFactorAuthentication"
+| summarize FailedAttempts = count() by UserPrincipalName, IPAddress, TimeGenerated
+| where FailedAttempts > 10
+| extend Message = "Potential MFA bombing detected"
+| project TimeGenerated, UserPrincipalName, IPAddress, FailedAttempts, Message
