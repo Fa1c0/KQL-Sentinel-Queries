@@ -1,0 +1,5 @@
+DeviceProcessEvents
+| where ProcessCommandLine contains "sekurlsa::" or ProcessCommandLine contains "lsadump::"
+| where InitiatingProcessName in ("cmd.exe", "powershell.exe")
+| extend Message = "Potential Mimikatz credential dumping detected"
+| project TimeGenerated, DeviceName, InitiatingProcessName, ProcessCommandLine, Message
