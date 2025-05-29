@@ -1,0 +1,23 @@
+let ExistingDevices = DeviceInfo
+| where TimeGenerated between (ago(90d) .. ago(2d))
+| where DeviceName <> ""
+| extend CleanedDeviceName = replace_regex(DeviceName, @"\.<<yourorghere>>\.com$", "")
+| distinct CleanedDeviceName;
+let NewDevices = DeviceInfo
+| where DeviceType <> "Mobile"
+| where OnboardingStatus <> "Unsupported"
+| where OnboardingStatus <> "Insufficient info"
+| where TimeGenerated > ago(2d)
+| extend CleanedDeviceName = replace_regex(DeviceName, @"\.<<yourorghere>>\.com$", "")
+| where not(CleanedDeviceName in (ExistingDevices))
+| extend UserName = tostring(LoggedOnUsers[0].UserName)
+| distinct CleanedDeviceName//, UserName, OSPlatform, PublicIP, RegistryDeviceTag, DeviceType, OnboardingStatus, OSDistribution, AzureResourceId, AwsResourceName
+| where CleanedDeviceName <> "";
+DeviceInfo
+| where TimeGenerated > ago(24h)
+| where isnotempty(DeviceName)
+| extend CleanedDeviceName = replace_regex(DeviceName, @"\.<<yourorghere>>\.com$", "")
+| summarize arg_max(TimeGenerated, *) by CleanedDeviceName
+| where CleanedDeviceName in (NewDevices)
+| where OnboardingStatus <> "Onboarded"
+| where DeviceName contains "<<yourorghere>>.com"
