@@ -1,6 +1,6 @@
 let HighPrivUsers = (
 IdentityInfo
-| where JobTitle has_any ('legal','director','shareholder', 'chief','legal','directors','security','I.T','IT','admin','human','resources','HR','External Support')) | project AccountDisplayName;
+| where JobTitle has_any ('legal','director','shareholder', 'chief','legal','directors','security','I.T','IT','admin','human','resources','HR','External Support')) | project AccountDisplayName; // Amend as required with company specific job roles.
 AADUserRiskEvents
 | where UserDisplayName in (HighPrivUsers)
 | extend countryOrRegion_ = tostring(Location.countryOrRegion)
