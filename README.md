@@ -4,6 +4,7 @@ A colletion of KQL use case queries to suppliment out of the box Sentinel.
 * ADO     Active Directory <br/>
 * Azure   Azure <br/>
 * CA      CloudApp Events <br/>
+* Entra   Azure EntraID <br/>
 * IDE     Identity Directory Events <br/>
 * MCAS    Microsoft Cloud App Security <br/>
 * MDE     Microsoft Defender for Endpoint <br/>
