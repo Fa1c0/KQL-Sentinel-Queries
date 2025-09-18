@@ -1,7 +1,7 @@
 let HighPrivUsers = (
 IdentityInfo
-| where JobTitle has_any ('legal','director','shareholder', 'chief','legal','directors','security','I.T','IT','admin','human','resources','HR','External Support')) | project AccountDisplayName; // Amend as required with company specific job roles.
+| where JobTitle has_any ('legal','director','shareholder', 'chief','legal','directors','security','I.T','IT','admin','human','resources','HR','External Support')) | project AccountDisplayName;
 AADUserRiskEvents
 | where UserDisplayName in (HighPrivUsers)
 | extend countryOrRegion_ = tostring(Location.countryOrRegion)
-| summarize by TimeGenerated, Activity, IpAddress, countryOrRegion_, RiskEventType,RiskDetail,RiskState
+| summarize by TimeGenerated, UserDisplayName, Activity, IpAddress, countryOrRegion_, RiskEventType,RiskDetail,RiskState
